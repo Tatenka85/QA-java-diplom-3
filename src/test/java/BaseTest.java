@@ -1,7 +1,6 @@
 import org.junit.After;
 import org.junit.Before;
 import org.openqa.selenium.WebDriver;
-import pages.Constants;
 import pages.MainPage;
 
 public class BaseTest {
@@ -22,11 +21,6 @@ public class BaseTest {
             userCreate = new UserCreate();
             userCreate.createUser();
         }
-    }
-
-    // Открытие страницы
-    public void openPage() {
-        driver.get(Constants.PAGE_URL); // Открытие главной страницы
     }
 
     // Закрытие WebDriver после каждого теста
