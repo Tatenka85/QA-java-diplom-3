@@ -1,0 +1,141 @@
+{
+  "uid" : "c0c73bd50bb711aa",
+  "name" : "testTabNavigationAndScroll[Тест вкладки: Булки]",
+  "fullName" : "ConstructorNavigationTest.testTabNavigationAndScroll[Тест вкладки: Булки]",
+  "historyId" : "a2ba56e675b4312f419b47d123dfebd4",
+  "time" : {
+    "start" : 1742141829588,
+    "stop" : 1742141837015,
+    "duration" : 7427
+  },
+  "status" : "passed",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ ],
+  "testStage" : {
+    "status" : "passed",
+    "steps" : [ {
+      "name" : "Открываем главную страницу",
+      "time" : {
+        "start" : 1742141832723,
+        "stop" : 1742141834599,
+        "duration" : 1876
+      },
+      "status" : "passed",
+      "steps" : [ ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "stepsCount" : 0,
+      "hasContent" : false,
+      "shouldDisplayMessage" : false,
+      "attachmentsCount" : 0
+    }, {
+      "name" : "Кликаем по кнопке 'Конструктор'",
+      "time" : {
+        "start" : 1742141834600,
+        "stop" : 1742141834918,
+        "duration" : 318
+      },
+      "status" : "passed",
+      "steps" : [ ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "stepsCount" : 0,
+      "hasContent" : false,
+      "shouldDisplayMessage" : false,
+      "attachmentsCount" : 0
+    }, {
+      "name" : "Кликаем по вкладке 'Булки'",
+      "time" : {
+        "start" : 1742141834943,
+        "stop" : 1742141836264,
+        "duration" : 1321
+      },
+      "status" : "passed",
+      "steps" : [ ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "stepsCount" : 0,
+      "hasContent" : false,
+      "shouldDisplayMessage" : false,
+      "attachmentsCount" : 0
+    }, {
+      "name" : "Получаем текст активной вкладки",
+      "time" : {
+        "start" : 1742141836265,
+        "stop" : 1742141836370,
+        "duration" : 105
+      },
+      "status" : "passed",
+      "steps" : [ ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "stepsCount" : 0,
+      "hasContent" : false,
+      "shouldDisplayMessage" : false,
+      "attachmentsCount" : 0
+    }, {
+      "name" : "Получаем секцию 'Булки'",
+      "time" : {
+        "start" : 1742141836372,
+        "stop" : 1742141836439,
+        "duration" : 67
+      },
+      "status" : "passed",
+      "steps" : [ ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "stepsCount" : 0,
+      "hasContent" : false,
+      "shouldDisplayMessage" : false,
+      "attachmentsCount" : 0
+    } ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 5,
+    "hasContent" : true,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  },
+  "afterStages" : [ ],
+  "labels" : [ {
+    "name" : "package",
+    "value" : ""
+  }, {
+    "name" : "testClass",
+    "value" : "ConstructorNavigationTest"
+  }, {
+    "name" : "testMethod",
+    "value" : "testTabNavigationAndScroll[Тест вкладки: Булки]"
+  }, {
+    "name" : "suite",
+    "value" : "ConstructorNavigationTest"
+  }, {
+    "name" : "host",
+    "value" : "LAPTOP-2BDDJQ7H"
+  }, {
+    "name" : "thread",
+    "value" : "25712@LAPTOP-2BDDJQ7H.main(1)"
+  }, {
+    "name" : "framework",
+    "value" : "junit4"
+  }, {
+    "name" : "language",
+    "value" : "java"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure2"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : false,
+  "retry" : false,
+  "extra" : {
+    "severity" : "normal",
+    "retries" : [ ],
+    "categories" : [ ],
+    "tags" : [ ]
+  },
+  "source" : "c0c73bd50bb711aa.json",
+  "parameterValues" : [ ]
+}

@@ -1,0 +1,111 @@
+[ {
+  "uid" : "7749070bbdc31616",
+  "name" : "testRegistrationWithInvalidPassword",
+  "time" : {
+    "start" : 1742141899818,
+    "stop" : 1742141904673,
+    "duration" : 4855
+  },
+  "status" : "passed",
+  "severity" : "normal"
+}, {
+  "uid" : "73ef4be6e1f69736",
+  "name" : "testLogin",
+  "time" : {
+    "start" : 1742141859265,
+    "stop" : 1742141867082,
+    "duration" : 7817
+  },
+  "status" : "passed",
+  "severity" : "normal"
+}, {
+  "uid" : "e4a81bdaba674117",
+  "name" : "testConstructorButton",
+  "time" : {
+    "start" : 1742141874659,
+    "stop" : 1742141882304,
+    "duration" : 7645
+  },
+  "status" : "passed",
+  "severity" : "normal"
+}, {
+  "uid" : "1ba84be03bb9f652",
+  "name" : "testTabNavigationAndScroll[Тест вкладки: Соусы]",
+  "time" : {
+    "start" : 1742141837110,
+    "stop" : 1742141842791,
+    "duration" : 5681
+  },
+  "status" : "passed",
+  "severity" : "normal"
+}, {
+  "uid" : "e4581c4f08604074",
+  "name" : "testLoginWithIncorrectPassword",
+  "time" : {
+    "start" : 1742141847526,
+    "stop" : 1742141859255,
+    "duration" : 11729
+  },
+  "status" : "passed",
+  "severity" : "normal"
+}, {
+  "uid" : "62af16b7b15807d",
+  "name" : "testLogoNavigation",
+  "time" : {
+    "start" : 1742141882308,
+    "stop" : 1742141891290,
+    "duration" : 8982
+  },
+  "status" : "passed",
+  "severity" : "normal"
+}, {
+  "uid" : "d6897c2164d647dd",
+  "name" : "testSuccessfulRegistration",
+  "time" : {
+    "start" : 1742141904677,
+    "stop" : 1742141911573,
+    "duration" : 6896
+  },
+  "status" : "passed",
+  "severity" : "normal"
+}, {
+  "uid" : "c0c73bd50bb711aa",
+  "name" : "testTabNavigationAndScroll[Тест вкладки: Булки]",
+  "time" : {
+    "start" : 1742141829588,
+    "stop" : 1742141837015,
+    "duration" : 7427
+  },
+  "status" : "passed",
+  "severity" : "normal"
+}, {
+  "uid" : "2d15d1aabdc2509c",
+  "name" : "testPasswordRecoveryProcess",
+  "time" : {
+    "start" : 1742141867087,
+    "stop" : 1742141874653,
+    "duration" : 7566
+  },
+  "status" : "passed",
+  "severity" : "normal"
+}, {
+  "uid" : "843988188adecb38",
+  "name" : "testLogout",
+  "time" : {
+    "start" : 1742141891293,
+    "stop" : 1742141899803,
+    "duration" : 8510
+  },
+  "status" : "passed",
+  "severity" : "normal"
+}, {
+  "uid" : "d8c378793795cab6",
+  "name" : "testTabNavigationAndScroll[Тест вкладки: Начинки]",
+  "time" : {
+    "start" : 1742141842796,
+    "stop" : 1742141847501,
+    "duration" : 4705
+  },
+  "status" : "passed",
+  "severity" : "normal"
+} ]

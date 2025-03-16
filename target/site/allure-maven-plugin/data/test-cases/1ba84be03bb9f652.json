@@ -1,0 +1,141 @@
+{
+  "uid" : "1ba84be03bb9f652",
+  "name" : "testTabNavigationAndScroll[Тест вкладки: Соусы]",
+  "fullName" : "ConstructorNavigationTest.testTabNavigationAndScroll[Тест вкладки: Соусы]",
+  "historyId" : "20acea4a7330a80f4bece55b0c66f12b",
+  "time" : {
+    "start" : 1742141837110,
+    "stop" : 1742141842791,
+    "duration" : 5681
+  },
+  "status" : "passed",
+  "flaky" : false,
+  "newFailed" : false,
+  "beforeStages" : [ ],
+  "testStage" : {
+    "status" : "passed",
+    "steps" : [ {
+      "name" : "Открываем главную страницу",
+      "time" : {
+        "start" : 1742141838190,
+        "stop" : 1742141841611,
+        "duration" : 3421
+      },
+      "status" : "passed",
+      "steps" : [ ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "stepsCount" : 0,
+      "hasContent" : false,
+      "shouldDisplayMessage" : false,
+      "attachmentsCount" : 0
+    }, {
+      "name" : "Кликаем по кнопке 'Конструктор'",
+      "time" : {
+        "start" : 1742141841611,
+        "stop" : 1742141841854,
+        "duration" : 243
+      },
+      "status" : "passed",
+      "steps" : [ ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "stepsCount" : 0,
+      "hasContent" : false,
+      "shouldDisplayMessage" : false,
+      "attachmentsCount" : 0
+    }, {
+      "name" : "Кликаем по вкладке 'Соусы'",
+      "time" : {
+        "start" : 1742141841868,
+        "stop" : 1742141842055,
+        "duration" : 187
+      },
+      "status" : "passed",
+      "steps" : [ ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "stepsCount" : 0,
+      "hasContent" : false,
+      "shouldDisplayMessage" : false,
+      "attachmentsCount" : 0
+    }, {
+      "name" : "Получаем текст активной вкладки",
+      "time" : {
+        "start" : 1742141842055,
+        "stop" : 1742141842184,
+        "duration" : 129
+      },
+      "status" : "passed",
+      "steps" : [ ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "stepsCount" : 0,
+      "hasContent" : false,
+      "shouldDisplayMessage" : false,
+      "attachmentsCount" : 0
+    }, {
+      "name" : "Получаем секцию 'Соусы'",
+      "time" : {
+        "start" : 1742141842184,
+        "stop" : 1742141842246,
+        "duration" : 62
+      },
+      "status" : "passed",
+      "steps" : [ ],
+      "attachments" : [ ],
+      "parameters" : [ ],
+      "stepsCount" : 0,
+      "hasContent" : false,
+      "shouldDisplayMessage" : false,
+      "attachmentsCount" : 0
+    } ],
+    "attachments" : [ ],
+    "parameters" : [ ],
+    "stepsCount" : 5,
+    "hasContent" : true,
+    "shouldDisplayMessage" : false,
+    "attachmentsCount" : 0
+  },
+  "afterStages" : [ ],
+  "labels" : [ {
+    "name" : "package",
+    "value" : ""
+  }, {
+    "name" : "testClass",
+    "value" : "ConstructorNavigationTest"
+  }, {
+    "name" : "testMethod",
+    "value" : "testTabNavigationAndScroll[Тест вкладки: Соусы]"
+  }, {
+    "name" : "suite",
+    "value" : "ConstructorNavigationTest"
+  }, {
+    "name" : "host",
+    "value" : "LAPTOP-2BDDJQ7H"
+  }, {
+    "name" : "thread",
+    "value" : "25712@LAPTOP-2BDDJQ7H.main(1)"
+  }, {
+    "name" : "framework",
+    "value" : "junit4"
+  }, {
+    "name" : "language",
+    "value" : "java"
+  }, {
+    "name" : "resultFormat",
+    "value" : "allure2"
+  } ],
+  "parameters" : [ ],
+  "links" : [ ],
+  "hidden" : false,
+  "retry" : false,
+  "extra" : {
+    "severity" : "normal",
+    "retries" : [ ],
+    "categories" : [ ],
+    "tags" : [ ]
+  },
+  "source" : "1ba84be03bb9f652.json",
+  "parameterValues" : [ ]
+}
