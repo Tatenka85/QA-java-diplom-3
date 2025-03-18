@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 import pages.ProfilePage;
 import pages.LoginPage;
 
-public class ProfileNavigationTest extends BaseTest {
+public class ProfileNavigationTest extends Base {
 
     private ProfilePage profilePage;
 

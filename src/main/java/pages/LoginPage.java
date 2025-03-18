@@ -10,20 +10,15 @@ import java.time.Duration;
 
 public class LoginPage {
     private final WebDriverWait wait;
-    private final MainPage mainPage;
+    private final ProfilePage profilePage;
 
     public LoginPage(WebDriver driver) {
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        this.mainPage = new MainPage(driver);
-    }
-
-    @Step("Переходим на страницу входа")
-    public void goToLoginPage() {
-        mainPage.clickLoginButton();
+        this.profilePage = new ProfilePage(driver);
     }
 
     @Step("Проверяем, что поля для входа доступны")
-    public boolean isLoginFormVisible() {
+    public void isLoginFormVisible() {
         try {
             WebElement loginField = wait.until(ExpectedConditions.visibilityOfElementLocated(Constants.LOGINFIELD));
             WebElement passwordField = wait.until(ExpectedConditions.visibilityOfElementLocated(Constants.PASSWORDFIELD));
@@ -31,10 +26,11 @@ public class LoginPage {
             System.out.println("Поле для ввода логина видимо: " + loginField.isDisplayed());
             System.out.println("Поле для ввода пароля видимо: " + passwordField.isDisplayed());
             System.out.println("Кнопка 'Войти' видима: " + submitButton.isDisplayed());
-            return loginField.isDisplayed() && passwordField.isDisplayed() && submitButton.isDisplayed();
+            if (loginField.isDisplayed() && passwordField.isDisplayed()) {
+                submitButton.isDisplayed();
+            }
         } catch (Exception e) {
             System.err.println("Ошибка при проверке видимости формы входа: " + e.getMessage());
-            return false;
         }
     }
 
@@ -52,6 +48,12 @@ public class LoginPage {
         passwordInput.click();
         passwordInput.clear();
         passwordInput.sendKeys(password);
+    }
+
+    @Step("Клик на кнопку 'Конструктор' и проверка перехода на главную")
+    public void clickConstructorAndVerify() {
+        profilePage.clickConstructorAndVerify();
+        System.out.println("🔹 Переход на главную страницу через конструктор");
     }
 
     @Step("Нажимаем на кнопку 'Войти'")

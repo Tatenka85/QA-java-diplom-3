@@ -1,7 +1,6 @@
 package pages;
 
 import io.qameta.allure.Step;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -39,9 +38,7 @@ public class ProfilePage {
 
     @Step("Клик на кнопку 'Выйти'")
     public void clickLogoutButton() {
-        WebElement logoutButton = wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//button[@type='button' and contains(@class, 'Account_button__14Yp3') and contains(text(), 'Выход')]")
-        ));
+        WebElement logoutButton = wait.until(ExpectedConditions.visibilityOfElementLocated(Constants.LOGOUTBUTTON));
         assertTrue("Кнопка 'Выход' доступна", logoutButton.isDisplayed());
         logoutButton.click();
 

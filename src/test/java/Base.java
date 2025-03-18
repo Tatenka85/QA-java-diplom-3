@@ -3,7 +3,7 @@ import org.junit.Before;
 import org.openqa.selenium.WebDriver;
 import pages.MainPage;
 
-public class BaseTest {
+public class Base {
 
     protected WebDriver driver; // WebDriver для использования в тестах
     protected static UserCreate userCreate;

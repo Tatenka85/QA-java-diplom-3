@@ -25,6 +25,8 @@ public class RegisterTest {
 
     @Before
     public void setUp() {
+        System.out.println("🔹 Начало настройки теста: инициализация WebDriver и страниц");
+
         // Создаем WebDriver с помощью WebDriverFactory
         driver = WebDriverFactory.createForEnvironment();
         // Создаем страницы, используя существующий WebDriver
@@ -50,13 +52,20 @@ public class RegisterTest {
         // Проверяем, что форма регистрации видима
         assertTrue("Форма регистрации доступна!", registerPage.isRegistrationFormVisible());
 
+        // Генерация email
         email = "test" + System.currentTimeMillis() + "@example.com";
+
+        System.out.println("✅ Настройка теста завершена");
     }
 
     @Test
     public void testSuccessfulRegistration() {
+        System.out.println("🔹 Начало теста: успешная регистрация");
+
         String name = "Test User";
-        String password = "Password123"; //валидный пароль
+        String password = UserSteps.generateValidPassword(); // Генерация валидного пароля
+        System.out.println("🔹 Сгенерирован валидный пароль: " + password);
+
         registerPage.enterName(name);
         registerPage.enterEmail(email);
         registerPage.enterPassword(password);
@@ -80,15 +89,21 @@ public class RegisterTest {
 
         // Проверяем, что вход выполнен успешно
         assertTrue("Конструктор доступен!", registerPage.isBunsVisible());
+
+        System.out.println("✅ Тест завершен: регистрация и вход выполнены успешно");
     }
 
     @Test
     public void testRegistrationWithInvalidPassword() {
-        registerPage.enterName("Test User");
+        System.out.println("🔹 Начало теста: регистрация с некорректным паролем");
+
+        String name = "Test User";
+        String invalidPassword = UserSteps.generateInvalidPassword(); // Генерация невалидного пароля
+        System.out.println("🔹 Сгенерирован невалидный пароль: " + invalidPassword);
+
+        registerPage.enterName(name);
         registerPage.enterEmail(email);
-        //невалидный пароль
-        String invalidPassword = "Pass";
-        registerPage.enterPassword(invalidPassword);  // Некорректный пароль
+        registerPage.enterPassword(invalidPassword);
         registerPage.clickRegister();
 
         // Проверяем, что появляется сообщение об ошибке
@@ -96,12 +111,19 @@ public class RegisterTest {
         WebElement errorMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(Constants.ERRORMESSAGEPASS));
 
         assertTrue("Сообщение об ошибке отображается!", errorMessage.getText().contains("Некорректный пароль"));
+
+        System.out.println("✅ Тест завершен: сообщение об ошибке отображается корректно");
     }
 
     @After
     public void tearDown() {
+        System.out.println("🔹 Начало очистки: закрытие браузера");
+
         if (driver != null) {
             driver.quit(); // Закрываем браузер
+            System.out.println("🔹 Браузер закрыт");
         }
+
+        System.out.println("✅ Очистка завершена");
     }
 }

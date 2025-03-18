@@ -5,7 +5,7 @@ import org.openqa.selenium.By;
 public class Constants {
     public static final String BROWSER_NAME_ENV_VARIABLE = "BROWSER_NAME"; // Переменная окружения для выбора браузера
     public static final String BROWSER_NAME_SYS_PROPERTY = "browser.name"; // Системное свойство для выбора браузера
-    public static final String DEFAULT_BROWSER_NAME = "YANDEX"; // Браузер по умолчанию
+    public static final String DEFAULT_BROWSER_NAME = "CHROME"; // Браузер по умолчанию
 
     public static final String PAGE_URL = "https://stellarburgers.nomoreparties.site/";
 
@@ -22,13 +22,13 @@ public class Constants {
     public static final By RECOVER_PASSWORD_LINK = By.xpath("//a[contains(@class, 'Auth_link__1fOlj') and contains(text(), 'Восстановить пароль')]");
     public static final By REGISTER_LINK = By.cssSelector("a[href='/register']");
 
-    public static final By LOGINFIELD = By.xpath("//input[@name='name']");
+    public static final By LOGINFIELD = By.cssSelector("input[type='email'][name='name']");
     public static final By PASSWORDFIELD = By.xpath("//input[@name='Пароль']");
-    public static final By SUBMITBUTTON = By.xpath("//button[contains(@class, 'button_button_type_primary') and text()='Войти']");
+    public static final By SUBMITBUTTON = By.cssSelector("button.button_button_type_primary__1O7Bx");
 
     public static final By NAMEFIELD = By.xpath("//input[@name='name'][preceding-sibling::label[text()='Имя']]");
     public static final By EMAILFIELD = By.xpath("//input[@name='name'][preceding-sibling::label[text()='Email']]");
-    public static final By PASSWORD_FIELD = By.xpath("//input[@type='password' and @name='Пароль']");
+    public static final By PASSWORD_FIELD = By.cssSelector("input[type='password'][name='Пароль']");
     public static final By REGISTERBUTTON = By.xpath("//button[text()='Зарегистрироваться']");
     public static final By ERRORMESSAGEPASS = By.xpath("//p[contains(@class, 'input__error') and contains(text(), 'Некорректный пароль')]");
 
