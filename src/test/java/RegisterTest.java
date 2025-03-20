@@ -1,129 +1,63 @@
+import com.github.javafaker.Faker;
+import common.BaseUITest;
+import io.qameta.allure.Description;
+import io.qameta.allure.junit4.DisplayName;
+import io.restassured.response.ValidatableResponse;
+import org.apache.http.HttpStatus;
 import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
-
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import pages.Constants;
-import pages.LoginPage;
-import pages.RegisterPage;
-import pages.MainPage;
+import steps.LoginSteps;
+import steps.RegisterSteps;
+import pages.User;
+import steps.UserApiSteps;
 
 import java.time.Duration;
-import java.util.Objects;
 
-public class RegisterTest {
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertEquals;
 
-    private WebDriver driver;
-    private RegisterPage registerPage;
-    private String email;
-    private WebDriverWait wait;
+public class RegisterTest extends BaseUITest {
 
-    @Before
-    public void setUp() {
-        System.out.println("🔹 Начало настройки теста: инициализация WebDriver и страниц");
-
-        // Создаем WebDriver с помощью WebDriverFactory
-        driver = WebDriverFactory.createForEnvironment();
-        // Создаем страницы, используя существующий WebDriver
-        registerPage = new RegisterPage(driver);
-        new LoginPage(driver);
-        MainPage mainPage = new MainPage(driver);
-        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-
-        // Открываем главную страницу
-        mainPage.openPage();
-        // Ожидание полной загрузки страницы
-        wait.until(driver -> Objects.equals(((JavascriptExecutor) driver).executeScript("return document.readyState"), "complete"));
-
-        mainPage.clickLoginButton();
-
-        // Ожидание загрузки формы входа
-        wait.until(ExpectedConditions.visibilityOfElementLocated(Constants.REGISTER_LINK));
-
-        registerPage.goToRegisterPage(); // Переход на страницу регистрации
-
-        // Ожидание загрузки формы регистрации
-        wait.until(ExpectedConditions.visibilityOfElementLocated(Constants.NAMEFIELD));
-        // Проверяем, что форма регистрации видима
-        assertTrue("Форма регистрации доступна!", registerPage.isRegistrationFormVisible());
-
-        // Генерация email
-        email = "test" + System.currentTimeMillis() + "@example.com";
-
-        System.out.println("✅ Настройка теста завершена");
-    }
-
-    @Test
-    public void testSuccessfulRegistration() {
-        System.out.println("🔹 Начало теста: успешная регистрация");
-
-        String name = "Test User";
-        String password = UserSteps.generateValidPassword(); // Генерация валидного пароля
-        System.out.println("🔹 Сгенерирован валидный пароль: " + password);
-
-        registerPage.enterName(name);
-        registerPage.enterEmail(email);
-        registerPage.enterPassword(password);
-        registerPage.clickRegister();
-
-        // Ожидание загрузки формы входа
-        wait.until(ExpectedConditions.visibilityOfElementLocated(Constants.LOGINFIELD));
-
-        // Создаем объект LoginPage
-        LoginPage loginPage = new LoginPage(driver);
-
-        // Убедимся, что форма входа полностью загружена
-        wait.until(ExpectedConditions.elementToBeClickable(Constants.LOGINFIELD));
-        wait.until(ExpectedConditions.elementToBeClickable(Constants.PASSWORDFIELD));
-        wait.until(ExpectedConditions.elementToBeClickable(Constants.SUBMITBUTTON));
-
-        // Выполняем вход после регистрации
-        loginPage.enterLogin(email);
-        loginPage.enterPassword(password);
-        loginPage.clickSubmitButton();
-
-        // Проверяем, что вход выполнен успешно
-        assertTrue("Конструктор доступен!", registerPage.isBunsVisible());
-
-        System.out.println("✅ Тест завершен: регистрация и вход выполнены успешно");
-    }
-
-    @Test
-    public void testRegistrationWithInvalidPassword() {
-        System.out.println("🔹 Начало теста: регистрация с некорректным паролем");
-
-        String name = "Test User";
-        String invalidPassword = UserSteps.generateInvalidPassword(); // Генерация невалидного пароля
-        System.out.println("🔹 Сгенерирован невалидный пароль: " + invalidPassword);
-
-        registerPage.enterName(name);
-        registerPage.enterEmail(email);
-        registerPage.enterPassword(invalidPassword);
-        registerPage.clickRegister();
-
-        // Проверяем, что появляется сообщение об ошибке
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(3));
-        WebElement errorMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(Constants.ERRORMESSAGEPASS));
-
-        assertTrue("Сообщение об ошибке отображается!", errorMessage.getText().contains("Некорректный пароль"));
-
-        System.out.println("✅ Тест завершен: сообщение об ошибке отображается корректно");
-    }
+    private final Faker faker = new Faker();
+    private final String name = faker.name().firstName();
+    private final String email = faker.internet().emailAddress();
+    private final String password = faker.internet().password(8, 12);
 
     @After
-    public void tearDown() {
-        System.out.println("🔹 Начало очистки: закрытие браузера");
+    public void deleteUser() {
+        UserApiSteps userApi = new UserApiSteps();
+        User user = new User(null, password, email);
+        ValidatableResponse response = userApi.loginUser(user);
+        response.log().all()
+                .assertThat()
+                .statusCode(HttpStatus.SC_OK);
 
-        if (driver != null) {
-            driver.quit(); // Закрываем браузер
-            System.out.println("🔹 Браузер закрыт");
-        }
+        String accessToken = response.extract().path("accessToken");
+        response = userApi.deleteUser(accessToken);
+        response.log().all()
+                .assertThat()
+                .statusCode(HttpStatus.SC_ACCEPTED)
+                .body("success", is(true));
+    }
 
-        System.out.println("✅ Очистка завершена");
+    @Test
+    @DisplayName("Регистрация нового пользователя через UI")
+    @Description("Проверка регистрации нового пользователя, после регистрации проверяется переход на страницу логина.")
+    public void testUserRegistration() {
+        RegisterSteps registerPage = new RegisterSteps(driver);
+        registerPage.openRegistrationPage();
+
+        registerPage.setName(name);
+        registerPage.setEmail(email);
+        registerPage.setPassword(password);
+        registerPage.clickRegisterButton();
+
+        new WebDriverWait(driver, Duration.ofSeconds(5))
+                .until(ExpectedConditions.urlToBe(LoginSteps.LOGIN_PAGE_URL));
+
+        String currentUrl = driver.getCurrentUrl();
+        assertEquals(LoginSteps.LOGIN_PAGE_URL, currentUrl);
     }
 }

@@ -1,0 +1,20 @@
+package utils;
+
+import io.qameta.allure.restassured.AllureRestAssured;
+import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.http.ContentType;
+import io.restassured.specification.RequestSpecification;
+
+import static pages.Constants.PAGE_URL;
+
+public class HttpUser {
+
+    protected static RequestSpecification requestSpecification() {
+        return new RequestSpecBuilder()
+                .setBaseUri(PAGE_URL)
+                .setContentType(ContentType.JSON)
+                .build()
+                .filter(new AllureRestAssured())
+                .log().all();
+    }
+}

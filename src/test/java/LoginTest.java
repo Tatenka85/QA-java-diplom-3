@@ -1,143 +1,124 @@
+import com.github.javafaker.Faker;
+import common.BaseUITest;
+import io.qameta.allure.Description;
+import io.qameta.allure.junit4.DisplayName;
+import io.restassured.response.ValidatableResponse;
+import org.apache.http.HttpStatus;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
-
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.StaleElementReferenceException;
-import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebElement;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import pages.Constants;
-import pages.LoginPage;
-import pages.ProfilePage;
+import steps.*;
+import steps.RegisterSteps;
+import pages.User;
+import steps.UserApiSteps;
 
 import java.time.Duration;
-import java.util.Objects;
 
-public class LoginTest extends Base {
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertEquals;
 
-    private LoginPage loginPage;
-    private WebDriverWait wait;
-    private ProfilePage profilePage;
+@RunWith(Parameterized.class)
+public class LoginTest extends BaseUITest {
+
+    protected UserApiSteps userApi;
+    protected User user;
+    private final int loginVersion;
+    protected String accessToken;
+
+    private final Faker faker = new Faker();
+
+    public LoginTest(int loginVersion) {
+        this.loginVersion = loginVersion;
+    }
 
     @Before
     public void setUp() {
-        System.out.println("🔹 Начало настройки теста: инициализация страниц");
+        userApi = new UserApiSteps();
 
-        loginPage = new LoginPage(driver);
-        profilePage = new ProfilePage(driver);
-        wait = new WebDriverWait(driver, Duration.ofSeconds(20)); // Увеличили время ожидания до 20 секунд
+        String randomName = faker.name().fullName();
+        String randomPassword = faker.internet().password();
+        String randomEmail = faker.internet().emailAddress();
 
-        // Ожидание полной загрузки страницы
-        wait.until(driver -> Objects.equals(((JavascriptExecutor) driver).executeScript("return document.readyState"), "complete"));
+        user = new User(randomName, randomPassword, randomEmail);
 
-        try {
-            // Нажимаем кнопку "Личный кабинет"
-            loginPage.goToProfile();
-            loginPage.isLoginFormVisible();
-            loginPage.performLoginWithoutGoToLoginPage(userCreate.getEmail(), userCreate.getPassword());
+        ValidatableResponse response = userApi.createUser(user);
+        response.log().all()
+                .assertThat()
+                .statusCode(HttpStatus.SC_OK)
+                .and()
+                .body("success", is(true));
 
-            // Переход на страницу входа
-            loginPage.goToProfile();
-            loginPage.clickLogoutButton();
-            loginPage.clickRecoverPasswordLink();
+        user.setName(null);
+        response = userApi.loginUser(user);
+        response.log().all()
+                .assertThat()
+                .statusCode(HttpStatus.SC_OK);
 
-            // Ожидание загрузки формы входа
-            wait.until(ExpectedConditions.visibilityOfElementLocated(Constants.BUTTONLOGIN));
-            loginPage.clickButtonLogin();
-            loginPage.goToProfile();
+        accessToken = response.extract().path("accessToken");
+    }
 
-            // Ожидание загрузки формы входа
-            wait.until(ExpectedConditions.visibilityOfElementLocated(Constants.LOGINFIELD));
-            loginPage.performLoginWithoutGoToLoginPage(userCreate.getEmail(), userCreate.getPassword());
-            loginPage.goToProfile();
-            loginPage.clickLogoutButton();
-            loginPage.clickConstructorAndVerify();
-            loginPage.goToProfile();
+    @After
+    public void userDelete() {
+        ValidatableResponse response = userApi.deleteUser(accessToken);
+        response.log().all()
+                .assertThat()
+                .statusCode(HttpStatus.SC_ACCEPTED)
+                .and()
+                .body("success", is(true));
+    }
 
-            // Ожидание загрузки формы входа
-            wait.until(ExpectedConditions.visibilityOfElementLocated(Constants.LOGINFIELD));
-            loginPage.performLoginWithoutGoToLoginPage(userCreate.getEmail(), userCreate.getPassword());
-
-            System.out.println("✅ Настройка теста завершена");
-        } catch (StaleElementReferenceException e) {
-            System.err.println("Ошибка в setUp: элемент устарел. Повторите тест.");
-        } catch (TimeoutException e) {
-            System.err.println("Ошибка в setUp: время ожидания истекло. Проверьте, что элемент доступен.");
-        }
+    @Parameterized.Parameters
+    public static Object[][] getUserData() {
+        return new Object[][] {
+                { 1 },
+                { 2 },
+                { 3 },
+                { 4 }
+        };
     }
 
     @Test
-    public void testLogin() {
-        System.out.println("🔹 Начало теста: вход с корректными данными");
-
-        try {
-            // Выполняем вход с корректными данными
-            loginPage.performLoginWithoutGoToLoginPage(userCreate.getEmail(), userCreate.getPassword());
-
-            // Переходим в профиль и выходим
-            loginPage.goToProfile();
-            loginPage.clickLogoutButton();
-
-            System.out.println("✅ Тест завершен: вход и выход выполнены успешно");
-        } catch (StaleElementReferenceException e) {
-            System.err.println("Ошибка в testLogin: элемент устарел. Повторите тест.");
-        } catch (TimeoutException e) {
-            System.err.println("Ошибка в testLogin: время ожидания истекло. Проверьте, что элемент доступен.");
+    @DisplayName("Авторизация через различные способы")
+    @Description("Проверка успешной авторизации через разные варианты входа в систему.")
+    public void testLoginWithDifferentMethods() {
+        switch (loginVersion) {
+            case 1:
+            case 2:
+                ConstructorSteps constructorPage = new ConstructorSteps(driver);
+                constructorPage.openConstructorPage();
+                constructorPage.loginVersions(loginVersion);
+                break;
+            case 3:
+                RegisterSteps registerSteps = new RegisterSteps(driver);
+                registerSteps.openRegistrationPage();
+                registerSteps.switchToLoginPage();
+                break;
+            case 4:
+                ForgotPasswordSteps forgotPasswordSteps = new ForgotPasswordSteps(driver);
+                forgotPasswordSteps.openForgotPasswordPage();
+                forgotPasswordSteps.switchToLoginPage();
+                break;
         }
-    }
 
-    @Test
-    public void testLoginWithIncorrectPassword() {
-        System.out.println("🔹 Начало теста: вход с некорректным паролем");
+        LoginSteps loginSteps = new LoginSteps(driver);
 
-        try {
-            // Генерация некорректного пароля
-            String invalidPassword = UserSteps.generateInvalidPassword(); // Используем метод из UserSteps
-            System.out.println("🔹 Сгенерирован некорректный пароль: " + invalidPassword);
+        new WebDriverWait(driver, Duration.ofSeconds(5))
+                .until(ExpectedConditions.urlToBe(LoginSteps.LOGIN_PAGE_URL));
 
-            // Вводим корректный логин и некорректный пароль
-            loginPage.enterLogin(userCreate.getEmail());
-            loginPage.enterPassword(invalidPassword);
-            loginPage.clickSubmitButton();
+        String currentUrl = driver.getCurrentUrl();
+        assertEquals(LoginSteps.LOGIN_PAGE_URL, currentUrl);
 
-            // Проверяем, что появляется сообщение об ошибке
-            WebElement errorMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(Constants.ERRORMESSAGEPASS));
-            assertTrue("Сообщение об ошибке отображается!",
-                    errorMessage.getText().contains("Некорректный пароль"));
+        loginSteps.setEmail(user.getEmail());
+        loginSteps.setPassword(user.getPassword());
+        loginSteps.clickLoginButton();
 
-            System.out.println("✅ Тест завершен: ошибка при входе с некорректным паролем");
-        } catch (StaleElementReferenceException e) {
-            System.err.println("Ошибка в testLoginWithIncorrectPassword: элемент устарел. Повторите тест.");
-        } catch (TimeoutException e) {
-            System.err.println("Ошибка в testLoginWithIncorrectPassword: время ожидания истекло. Проверьте, что элемент доступен.");
-        }
-    }
-
-    @Test
-    public void testPasswordRecoveryProcess() {
-        System.out.println("🔹 Начало теста: восстановление пароля");
-
-        try {
-            // Нажимаем на ссылку "Восстановить пароль"
-            loginPage.clickRecoverPasswordLink();
-            loginPage.clickButtonLogin();
-
-            // Ожидаем, что кнопка "Войти" станет кликабельной
-            wait.until(ExpectedConditions.elementToBeClickable(Constants.BUTTONLOGIN));
-
-            // Выполняем вход с корректными данными
-            loginPage.performLoginWithoutGoToLoginPage(userCreate.getEmail(), userCreate.getPassword());
-
-            // Проверяем, что процесс входа завершен успешно
-            assertTrue("Конструктор доступен!", profilePage.isBurgerConstructorVisible());
-
-            System.out.println("✅ Тест завершен: восстановление пароля выполнено успешно");
-        } catch (StaleElementReferenceException e) {
-            System.err.println("Ошибка в testPasswordRecoveryProcess: элемент устарел. Повторите тест.");
-        } catch (TimeoutException e) {
-            System.err.println("Ошибка в testPasswordRecoveryProcess: время ожидания истекло. Проверьте, что элемент доступен.");
-        }
+        new WebDriverWait(driver, Duration.ofSeconds(5))
+                .until(ExpectedConditions.urlToBe(ConstructorSteps.CONSTRUCTOR_PAGE_URL));
+        currentUrl = driver.getCurrentUrl();
+        assertEquals(ConstructorSteps.CONSTRUCTOR_PAGE_URL, currentUrl);
     }
 }
