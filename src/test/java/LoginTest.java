@@ -11,10 +11,12 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import steps.*;
-import steps.RegisterSteps;
+import steps.ConstructorPage;
+import steps.ForgotPasswordPage;
+import steps.LoginPage;
+import steps.RegisterPage;
 import pages.User;
-import steps.UserApiSteps;
+import steps.UserApi;
 
 import java.time.Duration;
 
@@ -24,7 +26,7 @@ import static org.junit.Assert.assertEquals;
 @RunWith(Parameterized.class)
 public class LoginTest extends BaseUITest {
 
-    protected UserApiSteps userApi;
+    protected UserApi userApi;
     protected User user;
     private final int loginVersion;
     protected String accessToken;
@@ -37,7 +39,7 @@ public class LoginTest extends BaseUITest {
 
     @Before
     public void setUp() {
-        userApi = new UserApiSteps();
+        userApi = new UserApi();
 
         String randomName = faker.name().fullName();
         String randomPassword = faker.internet().password();
@@ -88,37 +90,37 @@ public class LoginTest extends BaseUITest {
         switch (loginVersion) {
             case 1:
             case 2:
-                ConstructorSteps constructorPage = new ConstructorSteps(driver);
+                ConstructorPage constructorPage = new ConstructorPage(driver);
                 constructorPage.openConstructorPage();
                 constructorPage.loginVersions(loginVersion);
                 break;
             case 3:
-                RegisterSteps registerSteps = new RegisterSteps(driver);
-                registerSteps.openRegistrationPage();
-                registerSteps.switchToLoginPage();
+                RegisterPage registerPage = new RegisterPage(driver);
+                registerPage.openRegistrationPage();
+                registerPage.switchToLoginPage();
                 break;
             case 4:
-                ForgotPasswordSteps forgotPasswordSteps = new ForgotPasswordSteps(driver);
-                forgotPasswordSteps.openForgotPasswordPage();
-                forgotPasswordSteps.switchToLoginPage();
+                ForgotPasswordPage forgotPasswordPage = new ForgotPasswordPage(driver);
+                forgotPasswordPage.openForgotPasswordPage();
+                forgotPasswordPage.switchToLoginPage();
                 break;
         }
 
-        LoginSteps loginSteps = new LoginSteps(driver);
+        LoginPage loginPage = new LoginPage(driver);
 
         new WebDriverWait(driver, Duration.ofSeconds(5))
-                .until(ExpectedConditions.urlToBe(LoginSteps.LOGIN_PAGE_URL));
+                .until(ExpectedConditions.urlToBe(LoginPage.LOGIN_PAGE_URL));
 
         String currentUrl = driver.getCurrentUrl();
-        assertEquals(LoginSteps.LOGIN_PAGE_URL, currentUrl);
+        assertEquals(LoginPage.LOGIN_PAGE_URL, currentUrl);
 
-        loginSteps.setEmail(user.getEmail());
-        loginSteps.setPassword(user.getPassword());
-        loginSteps.clickLoginButton();
+        loginPage.setEmail(user.getEmail());
+        loginPage.setPassword(user.getPassword());
+        loginPage.clickLoginButton();
 
         new WebDriverWait(driver, Duration.ofSeconds(5))
-                .until(ExpectedConditions.urlToBe(ConstructorSteps.CONSTRUCTOR_PAGE_URL));
+                .until(ExpectedConditions.urlToBe(ConstructorPage.CONSTRUCTOR_PAGE_URL));
         currentUrl = driver.getCurrentUrl();
-        assertEquals(ConstructorSteps.CONSTRUCTOR_PAGE_URL, currentUrl);
+        assertEquals(ConstructorPage.CONSTRUCTOR_PAGE_URL, currentUrl);
     }
 }

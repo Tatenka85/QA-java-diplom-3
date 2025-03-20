@@ -3,15 +3,18 @@ package common;
 import org.junit.After;
 import org.junit.Before;
 import org.openqa.selenium.WebDriver;
-import utils.WebDriverFactory;
+import utils.Browser;
+
+import java.io.IOException;
 
 public class BaseUITest {
 
     protected WebDriver driver;
 
     @Before
-    public void startUp() {
-        driver = WebDriverFactory.createForEnvironment(); // Теперь driver обновляется правильно
+    public void startUp() throws IOException {
+        Browser browser = new Browser();
+        driver = browser.initDriver();
     }
 
     @After

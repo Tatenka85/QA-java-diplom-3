@@ -5,7 +5,6 @@ import org.openqa.selenium.By;
 public class Constants {
     public static final String BROWSER_NAME_ENV_VARIABLE = "BROWSER_NAME"; // Переменная окружения для выбора браузера
     public static final String BROWSER_NAME_SYS_PROPERTY = "browser.name"; // Системное свойство для выбора браузера
-    public static final String DEFAULT_BROWSER_NAME= "CHROME"; // Браузер по умолчанию
 
     public static final String PAGE_URL = "https://stellarburgers.nomoreparties.site/";
 
