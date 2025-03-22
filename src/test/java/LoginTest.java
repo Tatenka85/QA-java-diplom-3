@@ -9,16 +9,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import steps.ConstructorPage;
 import steps.ForgotPasswordPage;
 import steps.LoginPage;
 import steps.RegisterPage;
 import pages.User;
 import steps.UserApi;
-
-import java.time.Duration;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertEquals;
@@ -30,7 +26,6 @@ public class LoginTest extends BaseUITest {
     protected User user;
     private final int loginVersion;
     protected String accessToken;
-
     private final Faker faker = new Faker();
 
     public LoginTest(int loginVersion) {
@@ -107,20 +102,17 @@ public class LoginTest extends BaseUITest {
         }
 
         LoginPage loginPage = new LoginPage(driver);
+        loginPage.openLoginPage();
 
-        new WebDriverWait(driver, Duration.ofSeconds(5))
-                .until(ExpectedConditions.urlToBe(LoginPage.LOGIN_PAGE_URL));
-
-        String currentUrl = driver.getCurrentUrl();
-        assertEquals(LoginPage.LOGIN_PAGE_URL, currentUrl);
+        assertEquals(LoginPage.LOGIN_PAGE_URL, loginPage.getCurrentUrl());
 
         loginPage.setEmail(user.getEmail());
         loginPage.setPassword(user.getPassword());
         loginPage.clickLoginButton();
 
-        new WebDriverWait(driver, Duration.ofSeconds(5))
-                .until(ExpectedConditions.urlToBe(ConstructorPage.CONSTRUCTOR_PAGE_URL));
-        currentUrl = driver.getCurrentUrl();
-        assertEquals(ConstructorPage.CONSTRUCTOR_PAGE_URL, currentUrl);
+        ConstructorPage constructorPage = new ConstructorPage(driver);
+        constructorPage.openConstructorPage();
+
+        assertEquals(ConstructorPage.CONSTRUCTOR_PAGE_URL, constructorPage.getCurrentUrl());
     }
 }

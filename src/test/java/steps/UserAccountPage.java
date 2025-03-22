@@ -13,11 +13,16 @@ public class UserAccountPage extends BasePage {
     private final By logoutButton = By.xpath("//button[text()='Выход']");
 
     public UserAccountPage(WebDriver driver){
-        this.driver = driver;
+        super(driver);
     }
 
     @Step("Выйти из аккаунта")
     public void clickLogoutButton() {
         clickElementButton(logoutButton);
+    }
+
+    @Step("Дождаться загрузки страницы учетной записи")
+    public void waitForUserAccountPageToLoad() {
+        waitForPageUrl(userAccountPageUrl);
     }
 }

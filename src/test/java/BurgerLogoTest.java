@@ -2,17 +2,10 @@ import common.BaseUITest;
 import io.qameta.allure.Description;
 import io.qameta.allure.junit4.DisplayName;
 import org.junit.Test;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-
-import pages.Constants;
 import steps.ForgotPasswordPage;
 import steps.LoginPage;
 import steps.RegisterPage;
-
-import java.time.Duration;
-
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class BurgerLogoTest extends BaseUITest {
 
@@ -23,11 +16,7 @@ public class BurgerLogoTest extends BaseUITest {
         RegisterPage registerPage = new RegisterPage(driver);
         registerPage.openRegistrationPage();
         registerPage.clickOnLogo();
-
-        new WebDriverWait(driver, Duration.ofSeconds(5))
-                .until(ExpectedConditions.urlToBe(Constants.PAGE_URL));
-        String currentUrl = driver.getCurrentUrl();
-        assertEquals(Constants.PAGE_URL, currentUrl);
+        assertTrue(registerPage.isRedirectedToConstructor());
     }
 
     @Test
@@ -37,11 +26,7 @@ public class BurgerLogoTest extends BaseUITest {
         LoginPage loginPage = new LoginPage(driver);
         loginPage.openLoginPage();
         loginPage.clickOnLogo();
-
-        new WebDriverWait(driver, Duration.ofSeconds(5))
-                .until(ExpectedConditions.urlToBe(Constants.PAGE_URL));
-        String currentUrl = driver.getCurrentUrl();
-        assertEquals(Constants.PAGE_URL, currentUrl);
+        assertTrue(loginPage.isRedirectedToConstructor());
     }
 
     @Test
@@ -51,10 +36,6 @@ public class BurgerLogoTest extends BaseUITest {
         ForgotPasswordPage forgotPasswordPage = new ForgotPasswordPage(driver);
         forgotPasswordPage.openForgotPasswordPage();
         forgotPasswordPage.clickOnLogo();
-
-        new WebDriverWait(driver, Duration.ofSeconds(5))
-                .until(ExpectedConditions.urlToBe(Constants.PAGE_URL));
-        String currentUrl = driver.getCurrentUrl();
-        assertEquals(Constants.PAGE_URL, currentUrl);
+        assertTrue(forgotPasswordPage.isRedirectedToConstructor());
     }
 }

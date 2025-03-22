@@ -8,8 +8,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import pages.BasePage;
-import pages.Constants;
-
 import java.time.Duration;
 import java.util.Objects;
 
@@ -32,12 +30,13 @@ public class ConstructorPage extends BasePage {
     private final By loginButton = By.xpath("//button[text()='Войти в аккаунт']");
 
     public ConstructorPage(WebDriver driver) {
-        this.driver = driver;
+        super(driver);
     }
 
-    @Step("Открыть страницу конструктора")
+    @Step("Открыть страницу конструктора и дождаться загрузки")
     public void openConstructorPage() {
-        driver.get(Constants.PAGE_URL);
+        driver.get(CONSTRUCTOR_PAGE_URL);
+        waitForPageUrl(CONSTRUCTOR_PAGE_URL);
     }
 
     @Step("Открыть аккаунт пользователя")

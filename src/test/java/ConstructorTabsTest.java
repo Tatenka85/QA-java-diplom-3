@@ -13,7 +13,6 @@ public class ConstructorTabsTest extends BaseUITest {
     public void testBunsTabIsActiveAfterClick() {
         ConstructorPage constructorPage = new ConstructorPage(driver);
         constructorPage.openConstructorPage();
-
         constructorPage.clickBunsTab();
         Assert.assertTrue("Вкладка с булочками не стала активной", constructorPage.checkIfBunsTabIsCurrent());
     }
@@ -24,7 +23,6 @@ public class ConstructorTabsTest extends BaseUITest {
     public void testSaucesTabIsActiveAfterClick() {
         ConstructorPage constructorPage = new ConstructorPage(driver);
         constructorPage.openConstructorPage();
-
         constructorPage.clickSaucesTab();
         Assert.assertTrue("Вкладка с соусами не стала активной", constructorPage.checkIfSaucesTabIsCurrent());
     }
@@ -35,7 +33,6 @@ public class ConstructorTabsTest extends BaseUITest {
     public void testFillingsTabIsActiveAfterClick() {
         ConstructorPage constructorPage = new ConstructorPage(driver);
         constructorPage.openConstructorPage();
-
         constructorPage.clickFillingsTab();
         Assert.assertTrue("Вкладка с начинками не стала активной", constructorPage.checkIfFillingsTabIsCurrent());
     }

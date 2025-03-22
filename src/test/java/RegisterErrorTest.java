@@ -12,7 +12,7 @@ public class RegisterErrorTest extends BaseUITest {
     @Test
     @DisplayName("Невозможно зарегистрироваться с коротким паролем")
     @Description("Проверка, что регистрация невозможна, если пароль короче 6 символов.")
-    public void testRegistrationWithShortPassword() throws InterruptedException {
+    public void testRegistrationWithShortPassword() {
 
         RegisterPage registerPage = new RegisterPage(driver);
         registerPage.openRegistrationPage();

@@ -45,7 +45,7 @@ public class RegisterTest extends BaseUITest {
     @Test
     @DisplayName("Регистрация нового пользователя через UI")
     @Description("Проверка регистрации нового пользователя, после регистрации проверяется переход на страницу логина.")
-    public void testUserRegistration() throws InterruptedException {
+    public void testUserRegistration() {
         RegisterPage registerPage = new RegisterPage(driver);
         registerPage.openRegistrationPage();
 

@@ -33,6 +33,20 @@ public class UserAccountTest extends BaseUITest {
         String email = "btata@qweasdmail.com";
         user = new User(name, password, email);
 
+        // Удаляем пользователя, если он уже существует
+        try {
+            ValidatableResponse loginResponse = userApi.loginUser(user);
+            if (loginResponse.extract().statusCode() == HttpStatus.SC_OK) {
+                String token = loginResponse.extract().path("accessToken");
+                userApi.deleteUser(token)
+                        .assertThat()
+                        .statusCode(HttpStatus.SC_ACCEPTED);
+            }
+        } catch (Exception e) {
+            // Пользователь не существует, продолжаем
+        }
+
+        // Регистрируем нового пользователя
         ValidatableResponse response = userApi.createUser(user);
         response.log().all()
                 .assertThat()
@@ -40,7 +54,8 @@ public class UserAccountTest extends BaseUITest {
                 .and()
                 .body("success", is(true));
 
-        user.setName(null);
+        // Логиним пользователя и получаем accessToken
+        user.setName(null); // Убираем имя для логина
         response = userApi.loginUser(user);
         response.log().all()
                 .assertThat()
@@ -48,6 +63,7 @@ public class UserAccountTest extends BaseUITest {
 
         accessToken = response.extract().path("accessToken");
 
+        // Открываем страницу логина и выполняем вход через UI
         LoginPage loginPage = new LoginPage(driver);
         loginPage.openLoginPage();
 
@@ -61,6 +77,7 @@ public class UserAccountTest extends BaseUITest {
         new WebDriverWait(driver, Duration.ofSeconds(5))
                 .until(ExpectedConditions.urlToBe(ConstructorPage.CONSTRUCTOR_PAGE_URL));
 
+        // Переходим в личный кабинет
         ConstructorPage constructorPage = new ConstructorPage(driver);
         constructorPage.clickUserAccountButton();
 
@@ -70,12 +87,16 @@ public class UserAccountTest extends BaseUITest {
 
     @After
     public void userDelete() {
-        ValidatableResponse response = userApi.deleteUser(accessToken);
-        response.log().all()
-                .assertThat()
-                .statusCode(HttpStatus.SC_ACCEPTED)
-                .and()
-                .body("success", is(true));
+        if (accessToken != null) {
+            ValidatableResponse response = userApi.deleteUser(accessToken);
+            response.log().all()
+                    .assertThat()
+                    .statusCode(HttpStatus.SC_ACCEPTED)
+                    .and()
+                    .body("success", is(true));
+        } else {
+            System.out.println("AccessToken is null. User was not deleted.");
+        }
     }
 
     @Test
@@ -90,7 +111,6 @@ public class UserAccountTest extends BaseUITest {
     @DisplayName("Выход из учетной записи пользователя")
     @Description("Проверка, что пользователь может выйти из своей учетной записи и перейти на страницу логина.")
     public void logoutFromUserAccount() {
-
         UserAccountPage userAccountPage = new UserAccountPage(driver);
         userAccountPage.clickLogoutButton();
 
