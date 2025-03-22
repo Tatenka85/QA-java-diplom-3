@@ -1,3 +1,4 @@
+import com.github.javafaker.Faker;
 import common.BaseUITest;
 import io.qameta.allure.Description;
 import io.qameta.allure.junit4.DisplayName;
@@ -6,15 +7,11 @@ import org.apache.http.HttpStatus;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import steps.ConstructorPage;
 import steps.LoginPage;
 import steps.UserAccountPage;
 import pages.User;
 import steps.UserApi;
-
-import java.time.Duration;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
@@ -24,13 +21,19 @@ public class UserAccountTest extends BaseUITest {
     protected UserApi userApi;
     protected User user;
     protected String accessToken;
+    protected Faker faker;
+    protected String name;
+    protected String email;
+    protected String password;
 
     @Before
     public void setUp() {
+        faker = new Faker(); // Инициализируем Faker
+        name = faker.name().firstName(); // Генерируем случайное имя
+        email = faker.internet().emailAddress(); // Генерируем случайный email
+        password = faker.internet().password(8, 12); // Генерируем случайный пароль
+
         userApi = new UserApi();
-        String name = "Tanya";
-        String password = "tatka1234567";
-        String email = "btata@qweasdmail.com";
         user = new User(name, password, email);
 
         // Удаляем пользователя, если он уже существует
@@ -66,23 +69,19 @@ public class UserAccountTest extends BaseUITest {
         // Открываем страницу логина и выполняем вход через UI
         LoginPage loginPage = new LoginPage(driver);
         loginPage.openLoginPage();
-
-        new WebDriverWait(driver, Duration.ofSeconds(5))
-                .until(ExpectedConditions.urlToBe(LoginPage.LOGIN_PAGE_URL));
-
         loginPage.setEmail(email);
         loginPage.setPassword(password);
         loginPage.clickLoginButton();
 
-        new WebDriverWait(driver, Duration.ofSeconds(5))
-                .until(ExpectedConditions.urlToBe(ConstructorPage.CONSTRUCTOR_PAGE_URL));
+        ConstructorPage constructorPage = new ConstructorPage(driver);
+        constructorPage.waitForPageUrl(ConstructorPage.CONSTRUCTOR_PAGE_URL);
 
         // Переходим в личный кабинет
-        ConstructorPage constructorPage = new ConstructorPage(driver);
         constructorPage.clickUserAccountButton();
 
-        new WebDriverWait(driver, Duration.ofSeconds(5))
-                .until(ExpectedConditions.urlToBe(UserAccountPage.userAccountPageUrl));
+        // Ожидаем загрузки страницы учетной записи
+        UserAccountPage userAccountPage = new UserAccountPage(driver);
+        userAccountPage.waitForUserAccountPageToLoad();
     }
 
     @After
@@ -114,8 +113,9 @@ public class UserAccountTest extends BaseUITest {
         UserAccountPage userAccountPage = new UserAccountPage(driver);
         userAccountPage.clickLogoutButton();
 
-        new WebDriverWait(driver, Duration.ofSeconds(5))
-                .until(ExpectedConditions.urlToBe(LoginPage.LOGIN_PAGE_URL));
+        // Ожидаем перехода на страницу логина
+        LoginPage loginPage = new LoginPage(driver);
+        loginPage.waitForPageUrl(LoginPage.LOGIN_PAGE_URL);
 
         String currentUrl = driver.getCurrentUrl();
         assertEquals(LoginPage.LOGIN_PAGE_URL, currentUrl);

@@ -6,15 +6,10 @@ import io.restassured.response.ValidatableResponse;
 import org.apache.http.HttpStatus;
 import org.junit.After;
 import org.junit.Test;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import steps.LoginPage;
 import steps.RegisterPage;
 import pages.User;
 import steps.UserApi;
-
-import java.time.Duration;
-
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertEquals;
 
@@ -54,8 +49,8 @@ public class RegisterTest extends BaseUITest {
         registerPage.setPassword(password);
         registerPage.clickRegisterButton();
 
-        new WebDriverWait(driver, Duration.ofSeconds(5))
-                .until(ExpectedConditions.urlToBe(LoginPage.LOGIN_PAGE_URL));
+        LoginPage loginPage = new LoginPage(driver);
+        loginPage.waitForPageUrl(LoginPage.LOGIN_PAGE_URL);
 
         String currentUrl = driver.getCurrentUrl();
         assertEquals(LoginPage.LOGIN_PAGE_URL, currentUrl);
